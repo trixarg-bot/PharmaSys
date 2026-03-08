@@ -64,6 +64,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (new Date(fecha_vencimiento) <= hoy) {
+      return NextResponse.json(
+        { error: "La fecha de vencimiento debe ser una fecha futura" },
+        { status: 400 }
+      );
+    }
+
     const result = await pool.query(
       `INSERT INTO medicamentos (nombre, descripcion, precio, cantidad, fecha_vencimiento)
        VALUES ($1, $2, $3, $4, $5)

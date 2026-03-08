@@ -43,7 +43,14 @@ export default function VentasPage() {
       const response = await fetch("/api/medicamentos");
       if (!response.ok) throw new Error("Error al cargar");
       const data = await response.json();
-      setMedicamentos(data.filter((m: Medicamento) => m.cantidad > 0));
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      setMedicamentos(
+        data.filter(
+          (m: Medicamento) =>
+            m.cantidad > 0 && new Date(m.fecha_vencimiento) > hoy
+        )
+      );
     } catch {
       toast.error("Error al cargar medicamentos");
     } finally {

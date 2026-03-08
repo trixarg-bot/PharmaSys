@@ -9,6 +9,7 @@ const links = [
   { href: "/medicamentos", label: "Registrar Medicamento" },
   { href: "/inventario", label: "Inventario" },
   { href: "/ventas", label: "Ventas" },
+  { href: "/historial-ventas", label: "Historial" },
 ];
 
 export function Navbar() {

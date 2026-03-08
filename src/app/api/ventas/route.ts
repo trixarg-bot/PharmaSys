@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     for (const item of items) {
       const stock = await client.query(
-        "SELECT cantidad, nombre FROM medicamentos WHERE id = $1",
+        "SELECT cantidad, nombre, fecha_vencimiento FROM medicamentos WHERE id = $1",
         [item.medicamento_id]
       );
 
@@ -62,11 +62,23 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (stock.rows[0].cantidad < item.cantidad) {
+      const med = stock.rows[0];
+
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      if (new Date(med.fecha_vencimiento) <= hoy) {
+        await client.query("ROLLBACK");
+        return NextResponse.json(
+          { error: `No se puede vender "${med.nombre}" porque está vencido` },
+          { status: 400 }
+        );
+      }
+
+      if (med.cantidad < item.cantidad) {
         await client.query("ROLLBACK");
         return NextResponse.json(
           {
-            error: `Stock insuficiente para "${stock.rows[0].nombre}". Disponible: ${stock.rows[0].cantidad}`,
+            error: `Stock insuficiente para "${med.nombre}". Disponible: ${med.cantidad}`,
           },
           { status: 400 }
         );

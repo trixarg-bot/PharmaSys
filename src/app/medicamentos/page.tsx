@@ -50,6 +50,12 @@ export default function MedicamentosPage() {
       toast.error("La fecha de vencimiento es obligatoria");
       return false;
     }
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (new Date(form.fecha_vencimiento) <= hoy) {
+      toast.error("La fecha de vencimiento debe ser una fecha futura");
+      return false;
+    }
     return true;
   };
 
