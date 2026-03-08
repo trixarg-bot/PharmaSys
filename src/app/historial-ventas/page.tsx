@@ -133,7 +133,6 @@ export default function HistorialVentasPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
                 <TableHead>Fecha</TableHead>
                 <TableHead className="text-center">Productos</TableHead>
                 <TableHead className="text-right">Total</TableHead>
@@ -143,9 +142,6 @@ export default function HistorialVentasPage() {
             <TableBody>
               {ventas.map((venta) => (
                 <TableRow key={venta.id}>
-                  <TableCell>
-                    <Badge variant="secondary">#{venta.id}</Badge>
-                  </TableCell>
                   <TableCell>{formatearFecha(venta.fecha)}</TableCell>
                   <TableCell className="text-center">
                     {venta.detalles?.length || 0}
@@ -175,9 +171,7 @@ export default function HistorialVentasPage() {
       >
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>
-              Detalle de Venta #{ventaSeleccionada?.id}
-            </DialogTitle>
+            <DialogTitle>Detalle de Venta</DialogTitle>
             <DialogDescription>
               {ventaSeleccionada && formatearFecha(ventaSeleccionada.fecha)}
             </DialogDescription>

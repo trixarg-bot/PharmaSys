@@ -193,21 +193,34 @@ export default function VentasPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-                <div className="flex-1 space-y-2">
+              <div className="space-y-4">
+                <div className="space-y-2">
                   <Label>Medicamento</Label>
                   <Select
                     value={medicamentoSeleccionado}
                     onValueChange={(v) => setMedicamentoSeleccionado(v ?? "")}
                   >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={
-                          cargandoMeds
-                            ? "Cargando..."
-                            : "Selecciona un medicamento"
-                        }
-                      />
+                    <SelectTrigger className="w-full h-auto min-h-10 py-2">
+                      {medicamentoSeleccionado ? (
+                        <span className="text-left leading-snug">
+                          {(() => {
+                            const med = medicamentos.find(
+                              (m) => String(m.id) === medicamentoSeleccionado
+                            );
+                            return med
+                              ? `${med.nombre} — ${formatearPrecio(med.precio)} (Stock: ${med.cantidad})`
+                              : "Selecciona un medicamento";
+                          })()}
+                        </span>
+                      ) : (
+                        <SelectValue
+                          placeholder={
+                            cargandoMeds
+                              ? "Cargando..."
+                              : "Selecciona un medicamento"
+                          }
+                        />
+                      )}
                     </SelectTrigger>
                     <SelectContent>
                       {medicamentos.map((med) => (
@@ -219,18 +232,20 @@ export default function VentasPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="w-full sm:w-28 space-y-2">
-                  <Label>Cantidad</Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={cantidadInput}
-                    onChange={(e) => setCantidadInput(e.target.value)}
-                  />
+                <div className="flex gap-4 items-end">
+                  <div className="w-full sm:w-36 space-y-2">
+                    <Label>Cantidad</Label>
+                    <Input
+                      type="number"
+                      min="1"
+                      value={cantidadInput}
+                      onChange={(e) => setCantidadInput(e.target.value)}
+                    />
+                  </div>
+                  <Button onClick={agregarAlCarrito} className="shrink-0">
+                    Agregar
+                  </Button>
                 </div>
-                <Button onClick={agregarAlCarrito} className="shrink-0">
-                  Agregar
-                </Button>
               </div>
             </CardContent>
           </Card>
